@@ -8,5 +8,7 @@
 #include "utils.h"
 
 void iterator(char* value);
+void imprimirPcb (PCB_data *pcb);
+PCB_data *descargarData (t_list *lista);
 
 #endif /* SERVER_H_ */

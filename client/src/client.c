@@ -49,7 +49,22 @@ int main(void)
 	enviar_mensaje(valor, conexion);	
 
 	// Armamos y enviamos el paquete
-	paquete(conexion);
+	// paquete(conexion);
+	// paqueteTest(conexion);
+	PCB_data *pcb = malloc(sizeof(PCB_data));
+	pcb->pid = 15;
+	pcb->program_counter = 20;
+	pcb->vQuantum = 0;
+	pcb->regitros.AX = 40;
+	pcb->regitros.BX = 50;
+	pcb->regitros.CX = 60;
+	pcb->regitros.DX = 70;
+	pcb->regitros.EAX = 140;
+	pcb->regitros.EBX = 150;
+	pcb->regitros.ECX = 160;
+	pcb->regitros.EDX = 170;
+
+	paquetePCB(conexion, pcb);
 
 	terminar_programa(conexion, logger, config);
 
@@ -121,6 +136,50 @@ void paquete(int conexion)
 
 	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
 	free(leido);
+	eliminar_paquete(paquete);
+}
+
+void paqueteTest(int conexion)
+{
+	t_paquete* paquete = crear_paquete();
+	int* data = malloc(sizeof(int));
+	*data = 0;
+	agregar_a_paquete(paquete, data, sizeof(int));
+	*data = 1;
+	agregar_a_paquete(paquete, data, sizeof(int));
+	*data = 2;
+	agregar_a_paquete(paquete, data, sizeof(int));
+	*data = 3;
+	agregar_a_paquete(paquete, data, sizeof(int));
+	
+	// Se envia paquete al finalizar input
+	enviar_paquete(paquete, conexion); 
+
+	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
+	eliminar_paquete(paquete);
+}
+
+void paquetePCB(int conexion, PCB_data *pcb)
+{
+	t_paquete* paquete = crear_paquete_pcb();
+	
+	agregar_a_paquete(paquete,&(pcb->pid),sizeof(pid_t));
+	agregar_a_paquete(paquete,&(pcb->program_counter),sizeof(uint32_t));
+	agregar_a_paquete(paquete,&(pcb->vQuantum),sizeof(uint16_t));
+
+	agregar_a_paquete(paquete,&(pcb->regitros.AX),sizeof(uint16_t));
+	agregar_a_paquete(paquete,&(pcb->regitros.BX),sizeof(uint16_t));
+	agregar_a_paquete(paquete,&(pcb->regitros.CX),sizeof(uint16_t));
+	agregar_a_paquete(paquete,&(pcb->regitros.DX),sizeof(uint16_t));
+	agregar_a_paquete(paquete,&(pcb->regitros.EAX),sizeof(uint32_t));
+	agregar_a_paquete(paquete,&(pcb->regitros.EBX),sizeof(uint32_t));
+	agregar_a_paquete(paquete,&(pcb->regitros.ECX),sizeof(uint32_t));
+	agregar_a_paquete(paquete,&(pcb->regitros.EDX),sizeof(uint32_t));
+
+	// Se envia paquete al finalizar input
+	enviar_paquete(paquete, conexion); 
+
+	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
 	eliminar_paquete(paquete);
 }
 

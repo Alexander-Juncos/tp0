@@ -78,6 +78,14 @@ t_paquete* crear_paquete(void)
 	return paquete;
 }
 
+t_paquete* crear_paquete_pcb(void)
+{
+	t_paquete* paquete = malloc(sizeof(t_paquete));
+	paquete->codigo_operacion = PCB;
+	crear_buffer(paquete);
+	return paquete;
+}
+
 void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
 {
 	paquete->buffer->stream = realloc(paquete->buffer->stream, paquete->buffer->size + tamanio + sizeof(int));
